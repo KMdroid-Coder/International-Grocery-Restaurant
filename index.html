@@ -11,6 +11,7 @@
         <h1>International Grocery Restaurant</h1>
         <nav>
             <a href="index.html">Home</a>
+            <a href="about.html">About us</a>
             <a href="menu.html">Menu</a>
             <a href="admin.html">Admin</a>
         </nav>
@@ -20,9 +21,31 @@
             <h2>Fresh, Authentic, Delicious</h2>
             <p>Experience the taste of international cuisine right at your doorstep.</p>
         </section>
+        <section class="menu-preview">
+            <h2>Featured Dishes</h2>
+            <div id="menu-grid" class="menu-grid"></div>
+        </section>
     </main>
     <footer>
         <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
     </footer>
+    <script src="firestore.js"></script>
+    <script>
+        async function fetchFeaturedMenu() {
+            const menuGrid = document.getElementById("menu-grid");
+            const querySnapshot = await db.collection("menu").limit(6).get();
+            querySnapshot.forEach(doc => {
+                const item = doc.data();
+                menuGrid.innerHTML += `
+                    <div class="menu-tile">
+                        <img src="${item.image}" alt="${item.name}" class="menu-img">
+                        <h3>${item.name}</h3>
+                        <p class="price">$${item.price}</p>
+                    </div>
+                `;
+            });
+        }
+        fetchFeaturedMenu();
+    </script>
 </body>
 </html>
