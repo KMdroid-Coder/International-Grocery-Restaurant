@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <main>
+        <section class="admin-panel">
+            <h2>Add New Menu Item</h2>
+            <input type="text" id="name" placeholder="Item Name">
+            <input type="text" id="description" placeholder="Description">
+            <input type="number" id="price" placeholder="Price">
+            <input type="text" id="image" placeholder="Image URL">
+            <button onclick="addMenuItem()">Add Item</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
+    </footer>
+    <script src="firestore.js"></script>
+    <script>
+        async function addMenuItem() {
+            const name = document.getElementById("name").value;
+            const description = document.getElementById("description").value;
+            const price = document.getElementById("price").value;
+            const image = document.getElementById("image").value;
+            await db.collection("menu").add({ name, description, price, image });
+            alert("Menu item added!");
+        }
+    </script>
+</body>
+</html>
