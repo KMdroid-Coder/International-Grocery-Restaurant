@@ -31,18 +31,20 @@
     </footer>
     <script src="firestore.js"></script>
     <script>
-        async function fetchFeaturedMenu() {
+        function fetchFeaturedMenu() {
             const menuGrid = document.getElementById("menu-grid");
-            const querySnapshot = await db.collection("menu").limit(6).get();
-            querySnapshot.forEach(doc => {
-                const item = doc.data();
-                menuGrid.innerHTML += `
-                    <div class="menu-tile">
-                        <img src="${item.image}" alt="${item.name}" class="menu-img">
-                        <h3>${item.name}</h3>
-                        <p class="price">$${item.price}</p>
-                    </div>
-                `;
+            db.collection("menu").where("featured", "==", true).onSnapshot((querySnapshot) => {
+                menuGrid.innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    const item = doc.data();
+                    menuGrid.innerHTML += `
+                        <div class="menu-tile">
+                            <img src="${item.image}" alt="${item.name}" class="menu-img">
+                            <h3>${item.name}</h3>
+                            <p class="price">$${item.price}</p>
+                        </div>
+                    `;
+                });
             });
         }
         fetchFeaturedMenu();
