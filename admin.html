@@ -1,3 +1,4 @@
+<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,16 +9,36 @@
 </head>
 <body>
     <header>
-        <h1>Admin Dashboard</h1>
+        <h1>International Grocery Restaurant</h1>
     </header>
+    <nav class="navbar">
+          <a href="index.html">Home</a>
+          <a href="about.html">About us</a>
+          <a href="menu.html">Menu</a>
+          <a href="admin.html">Admin</a>
+    </nav>
     <main>
         <section class="admin-panel">
             <h2>Add New Menu Item</h2>
             <input type="text" id="name" placeholder="Item Name">
             <input type="text" id="description" placeholder="Description">
             <input type="number" id="price" placeholder="Price">
-            <input type="text" id="image" placeholder="Image URL">
+            <input type="file" id="imageUpload" accept="image/*">
+            <label>
+                <input type="checkbox" id="featured"> Feature on Homepage
+            </label>
             <button onclick="addMenuItem()">Add Item</button>
+        </section>
+        
+        <section class="admin-menu-list">
+            <h2>Manage Menu Items</h2>
+            <div id="menu-list"></div>
+        </section>
+        
+        <section class="admin-about-edit">
+            <h2>Edit About Us</h2>
+            <textarea id="about-description" rows="5" cols="50"></textarea>
+            <button onclick="updateAboutUs()">Update Description</button>
         </section>
     </main>
     <footer>
@@ -29,10 +50,86 @@
             const name = document.getElementById("name").value;
             const description = document.getElementById("description").value;
             const price = document.getElementById("price").value;
-            const image = document.getElementById("image").value;
-            await db.collection("menu").add({ name, description, price, image });
-            alert("Menu item added!");
+            const featured = document.getElementById("featured").checked;
+            const imageFile = document.getElementById("imageUpload").files[0];
+            
+            if (!imageFile) {
+                alert("Please select an image");
+                return;
+            }
+            
+            const storageRef = firebase.storage().ref();
+            const imageRef = storageRef.child("menu_images/" + imageFile.name);
+            
+            const uploadTask = imageRef.put(imageFile);
+            uploadTask.on("state_changed", 
+                (snapshot) => {}, 
+                (error) => {
+                    console.error("Upload failed: ", error);
+                    alert("Image upload failed");
+                }, 
+                async () => {
+                    const imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+                    await db.collection("menu").add({ name, description, price, image: imageUrl, featured });
+                    alert("Menu item added!");
+                    fetchMenuItems();
+                }
+            );
         }
+        
+        async function fetchMenuItems() {
+            const menuList = document.getElementById("menu-list");
+            menuList.innerHTML = "";
+            const querySnapshot = await db.collection("menu").get();
+            querySnapshot.forEach(doc => {
+                const item = doc.data();
+                menuList.innerHTML += `
+                    <div class="menu-item">
+                        <img src="${item.image}" alt="${item.name}" class="menu-img">
+                        <h2>${item.name}</h2>
+                        <p>${item.description}</p>
+                        <p class="price">$${item.price}</p>
+                        <button onclick="editMenuItem('${doc.id}')">Edit</button>
+                        <button onclick="deleteMenuItem('${doc.id}')">Delete</button>
+                    </div>
+                `;
+            });
+        }
+        
+        async function editMenuItem(id) {
+            const newName = prompt("Enter new name:");
+            const newDescription = prompt("Enter new description:");
+            const newPrice = prompt("Enter new price:");
+            await db.collection("menu").doc(id).update({
+                name: newName,
+                description: newDescription,
+                price: newPrice
+            });
+            alert("Menu item updated!");
+            fetchMenuItems();
+        }
+        
+        async function deleteMenuItem(id) {
+            await db.collection("menu").doc(id).delete();
+            alert("Menu item deleted!");
+            fetchMenuItems();
+        }
+        
+        async function fetchAboutUs() {
+            const aboutDoc = await db.collection("about").doc("description").get();
+            if (aboutDoc.exists) {
+                document.getElementById("about-description").value = aboutDoc.data().text;
+            }
+        }
+        
+        async function updateAboutUs() {
+            const newDescription = document.getElementById("about-description").value;
+            await db.collection("about").doc("description").set({ text: newDescription });
+            alert("About Us updated!");
+        }
+        
+        fetchMenuItems();
+        fetchAboutUs();
     </script>
 </body>
 </html>
