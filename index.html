@@ -23,31 +23,66 @@
         </section>
         <section class="menu-preview">
             <h2>Featured Dishes</h2>
-            <div id="menu-grid" class="menu-grid"></div>
+            <div id="menu-grid" class="menu-grid"><p>Loading featured dishes...</p></div>
         </section>
     </main>
     <footer>
         <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
     </footer>
+
+    <!-- ✅ Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- ✅ Load Firestore Setup -->
     <script src="firestore.js"></script>
+
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Waiting for Firestore to load...");
+
+            const checkFirestore = setInterval(() => {
+                if (typeof db !== "undefined") {
+                    clearInterval(checkFirestore);
+                    console.log("Firestore is ready. Fetching featured dishes...");
+                    fetchFeaturedMenu();
+                }
+            }, 500);
+        });
+
         function fetchFeaturedMenu() {
             const menuGrid = document.getElementById("menu-grid");
-            db.collection("menu").where("featured", "==", true).onSnapshot((querySnapshot) => {
+            menuGrid.innerHTML = "<p>Loading featured dishes...</p>";
+
+            db.collection("menu").where("featured", "==", true).get()
+            .then((querySnapshot) => {
                 menuGrid.innerHTML = "";
+
+                if (querySnapshot.empty) {
+                    menuGrid.innerHTML = "<p>No featured dishes available.</p>";
+                    return;
+                }
+
                 querySnapshot.forEach((doc) => {
                     const item = doc.data();
+                    const imageUrl = item.image ? item.image : "default-image.jpg";
+                    const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A";
+
                     menuGrid.innerHTML += `
                         <div class="menu-tile">
-                            <img src="${item.image}" alt="${item.name}" class="menu-img">
+                            <img src="${imageUrl}" alt="${item.name}" class="menu-img">
                             <h3>${item.name}</h3>
-                            <p class="price">$${item.price}</p>
+                            <p class="price">${price}</p>
+                            <button class="order-now">Order Now</button>
                         </div>
                     `;
                 });
+            })
+            .catch((error) => {
+                console.error("Error fetching featured dishes:", error);
+                menuGrid.innerHTML = "<p>Error loading featured dishes.</p>";
             });
         }
-        fetchFeaturedMenu();
     </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,66 +16,98 @@
         <a href="menu.html">Menu</a>
         <a href="admin.html">Admin</a>
     </nav>
+
     <main>
+        <!-- ✅ Add Menu Item -->
         <section class="admin-panel">
             <h2>Add New Menu Item</h2>
-            <input type="text" id="name" placeholder="Item Name">
-            <input type="text" id="description" placeholder="Description">
-            <input type="number" id="price" placeholder="Price">
+            <input type="text" id="name" placeholder="Item Name" required>
+            <input type="text" id="description" placeholder="Description" required>
+            <input type="number" id="price" placeholder="Price" step="0.01" required>
             <input type="file" id="imageUpload" accept="image/*">
             <label>
                 <input type="checkbox" id="featured"> Feature on Homepage
             </label>
             <button onclick="addMenuItem()">Add Item</button>
         </section>
-        
+
+        <!-- ✅ Manage Menu Items -->
         <section class="admin-menu-list">
             <h2>Manage Menu Items</h2>
             <div id="menu-list"></div>
         </section>
-        
+
+        <!-- ✅ Edit About Us -->
         <section class="admin-about-edit">
             <h2>Edit About Us</h2>
             <textarea id="about-description" rows="5" cols="50"></textarea>
             <button onclick="updateAboutUs()">Update Description</button>
         </section>
     </main>
+
     <footer>
         <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
     </footer>
+
+    <!-- ✅ Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- ✅ Centralized Firestore Configuration -->
     <script src="firestore.js"></script>
+
     <script>
+        // Ensure Firestore is ready before using
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof db === "undefined") {
+                console.error("Firestore not initialized. Check firestore.js.");
+                return;
+            }
+            console.log("Firestore is available:", db);
+            fetchMenuItems();
+            fetchAboutUs();
+        });
+
+        // ✅ Add New Menu Item (Base64 Image)
         async function addMenuItem() {
-            const name = document.getElementById("name").value;
-            const description = document.getElementById("description").value;
+            console.log("Adding menu item...");
+
+            const name = document.getElementById("name").value.trim();
+            const description = document.getElementById("description").value.trim();
             const price = document.getElementById("price").value;
             const featured = document.getElementById("featured").checked;
             const imageFile = document.getElementById("imageUpload").files[0];
-            
-            if (!imageFile) {
-                alert("Please select an image");
+
+            if (!name || !description || !price || !imageFile) {
+                alert("Please fill in all fields and select an image.");
                 return;
             }
-            
-            const storageRef = firebase.storage().ref();
-            const imageRef = storageRef.child("menu_images/" + imageFile.name);
-            
-            const uploadTask = imageRef.put(imageFile);
-            uploadTask.on("state_changed", 
-                (snapshot) => {}, 
-                (error) => {
-                    console.error("Upload failed: ", error);
-                    alert("Image upload failed");
-                }, 
-                async () => {
-                    const imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
-                    await db.collection("menu").add({ name, description, price, image: imageUrl, featured });
+
+            const reader = new FileReader();
+            reader.readAsDataURL(imageFile);
+            reader.onloadend = async function () {
+                const base64String = reader.result;
+
+                try {
+                    const menuRef = await db.collection("menu").add({
+                        name,
+                        description,
+                        price: parseFloat(price).toFixed(2),
+                        image: base64String,
+                        featured
+                    });
+
+                    console.log("Menu item added:", menuRef.id);
                     alert("Menu item added!");
                     fetchMenuItems();
+                } catch (error) {
+                    console.error("Error adding menu item:", error);
+                    alert("Failed to add menu item.");
                 }
-            );
+            };
         }
-        
+
+        // ✅ Fetch & Display Menu Items
         async function fetchMenuItems() {
             const menuList = document.getElementById("menu-list");
             menuList.innerHTML = "";
@@ -89,47 +120,39 @@
                         <h2>${item.name}</h2>
                         <p>${item.description}</p>
                         <p class="price">$${item.price}</p>
-                        <button onclick="editMenuItem('${doc.id}')">Edit</button>
                         <button onclick="deleteMenuItem('${doc.id}')">Delete</button>
                     </div>
                 `;
             });
         }
-        
-        async function editMenuItem(id) {
-            const newName = prompt("Enter new name:");
-            const newDescription = prompt("Enter new description:");
-            const newPrice = prompt("Enter new price:");
-            await db.collection("menu").doc(id).update({
-                name: newName,
-                description: newDescription,
-                price: newPrice
-            });
-            alert("Menu item updated!");
-            fetchMenuItems();
-        }
-        
+
+        // ✅ Delete Menu Item
         async function deleteMenuItem(id) {
+            if (!confirm("Are you sure you want to delete this item?")) return;
             await db.collection("menu").doc(id).delete();
             alert("Menu item deleted!");
             fetchMenuItems();
         }
-        
+
+        // ✅ Fetch & Display About Us Section
         async function fetchAboutUs() {
             const aboutDoc = await db.collection("about").doc("description").get();
             if (aboutDoc.exists) {
                 document.getElementById("about-description").value = aboutDoc.data().text;
             }
         }
-        
+
+        // ✅ Update About Us Section
         async function updateAboutUs() {
-            const newDescription = document.getElementById("about-description").value;
+            const newDescription = document.getElementById("about-description").value.trim();
+            if (!newDescription) {
+                alert("Description cannot be empty!");
+                return;
+            }
             await db.collection("about").doc("description").set({ text: newDescription });
             alert("About Us updated!");
         }
-        
-        fetchMenuItems();
-        fetchAboutUs();
     </script>
+
 </body>
 </html>
