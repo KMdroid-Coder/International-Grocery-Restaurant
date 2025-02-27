@@ -18,31 +18,67 @@
     </nav>
     <main>
         <h1>Our Menu</h1>
-        <div id="menu-list"></div>
+        <div id="menu-list" class="menu-grid"><p>Loading menu...</p></div>
     </main>
     <footer>
         <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
     </footer>
+
+    <!-- ✅ Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- ✅ Load Firestore Setup -->
     <script src="firestore.js"></script>
+
     <script>
-        function fetchMenu() {
-            const menuList = document.getElementById("menu-list");
-            db.collection("menu").onSnapshot((querySnapshot) => {
+        // ✅ Ensure Firestore is ready before fetching menu items
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Waiting for Firestore to load...");
+
+            const checkFirestore = setInterval(() => {
+                if (typeof db !== "undefined") {
+                    clearInterval(checkFirestore);
+                    console.log("Firestore is ready. Fetching menu items...");
+                    fetchMenu();
+                }
+            }, 500);
+        });
+
+        async function fetchMenu() {
+            try {
+                const menuList = document.getElementById("menu-list");
+                menuList.innerHTML = "<p>Loading menu...</p>";
+
+                const querySnapshot = await db.collection("menu").get();
                 menuList.innerHTML = "";
+
+                if (querySnapshot.empty) {
+                    menuList.innerHTML = "<p>No menu items available.</p>";
+                    return;
+                }
+
                 querySnapshot.forEach((doc) => {
                     const item = doc.data();
+                    const imageUrl = item.image ? item.image : "default-image.jpg";
+                    const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A";
+
                     menuList.innerHTML += `
                         <div class="menu-item">
-                            <img src="${item.image}" alt="${item.name}" class="menu-img">
+                            <img src="${imageUrl}" alt="${item.name}" class="menu-img">
                             <h2>${item.name}</h2>
                             <p>${item.description}</p>
-                            <p class="price">$${item.price}</p>
+                            <p class="price">${price}</p>
+                            <button class="order-now">Order Now</button>
                         </div>
                     `;
                 });
-            });
+
+            } catch (error) {
+                console.error("Error fetching menu:", error);
+                document.getElementById("menu-list").innerHTML = "<p>Error loading menu.</p>";
+            }
         }
-        fetchMenu();
     </script>
 </body>
 </html>

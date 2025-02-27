@@ -19,12 +19,47 @@
     <main>
         <section class="about">
             <h2>Our Story</h2>
-            <p>At International Grocery Restaurant, we are dedicated to bringing you the best international cuisine with fresh, authentic flavors.</p>
-            <p>We source our ingredients from trusted suppliers and prepare each dish with love and care.</p>
+            <p id="about-content">Loading...</p> <!-- Dynamically Loaded -->
         </section>
     </main>
     <footer>
         <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
     </footer>
+
+    <!-- ✅ Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- ✅ Load Firestore Setup -->
+    <script src="firestore.js"></script>
+
+    <script>
+        // ✅ Ensure Firestore is ready before fetching About Us content
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Waiting for Firestore to load...");
+
+            const checkFirestore = setInterval(() => {
+                if (typeof db !== "undefined") {
+                    clearInterval(checkFirestore);
+                    console.log("Firestore is ready. Fetching About Us...");
+                    fetchAboutUs();
+                }
+            }, 500);
+        });
+
+        async function fetchAboutUs() {
+            try {
+                const aboutDoc = await db.collection("about").doc("description").get();
+                if (aboutDoc.exists) {
+                    document.getElementById("about-content").innerText = aboutDoc.data().text;
+                } else {
+                    document.getElementById("about-content").innerText = "Welcome to our restaurant! We bring you the best international flavors.";
+                }
+            } catch (error) {
+                console.error("Error fetching About Us content:", error);
+                document.getElementById("about-content").innerText = "Failed to load About Us.";
+            }
+        }
+    </script>
 </body>
 </html>
