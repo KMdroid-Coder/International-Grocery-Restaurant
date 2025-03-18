@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - K-fash Mediterranean cuisine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>K-fash Mediterranean cuisine</h1>
+    </header>
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="about.html">About us</a>
+        <a href="menu.html">Menu</a>
+        <a href="admin.html">Admin</a>
+        <a href="contact.html">Contact Us</a>
+    </nav>
+    <main>
+        <section class="contact">
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Your Email" required>
+                <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+            <p id="form-status" style="color: green; display: none;">Message sent successfully!</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 K-fash Mediterranean cuisine. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById("contact-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const message = document.getElementById("message").value.trim();
+
+            if (!name || !email || !message) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Simulate sending the message
+            console.log("Message sent:", { name, email, message });
+            document.getElementById("form-status").style.display = "block";
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
