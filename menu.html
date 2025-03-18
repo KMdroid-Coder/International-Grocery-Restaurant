@@ -18,6 +18,7 @@
     </nav>
     <main>
         <h1>Our Menu</h1>
+        <input type="text" id="search-bar" placeholder="Search for a dish..." oninput="filterMenu()"> <!-- Search Bar -->
         <div id="menu-list" class="menu-grid"><p>Loading menu...</p></div>
     </main>
     <footer>
@@ -78,6 +79,15 @@
                 console.error("Error fetching menu:", error);
                 document.getElementById("menu-list").innerHTML = "<p>Error loading menu.</p>";
             }
+        }
+
+        function filterMenu() {
+            const query = document.getElementById("search-bar").value.toLowerCase();
+            const menuItems = document.querySelectorAll(".menu-item");
+            menuItems.forEach(item => {
+                const name = item.querySelector("h2").innerText.toLowerCase();
+                item.style.display = name.includes(query) ? "block" : "none";
+            });
         }
     </script>
 </body>
