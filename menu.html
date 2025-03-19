@@ -24,7 +24,10 @@
     </nav>
     <main>
         <h1>Our Menu</h1>
-        <input type="text" id="search-bar" placeholder="Search for a dish..." oninput="filterMenu()"> <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search for a dish..." oninput="filterMenu()">
+            <button id="search-btn"><i class="fas fa-search"></i></button>
+        </div>
         <div id="menu-list" class="menu-grid"><p>Loading menu...</p></div>
     </main>
     <footer>

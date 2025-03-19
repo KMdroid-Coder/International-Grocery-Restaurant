@@ -20,6 +20,8 @@ body {
 /* Home Page (Index Page) Background */
 .index-page {
     background: url('assets/restaurant.jpg') no-repeat center center fixed;
+    background-size: cover !important; /* ✅ Forces full image coverage */
+    background-position: center center !important;
 }
 
 /* Menu Page Background */
@@ -132,6 +134,59 @@ nav a:hover {
     background: #ff9800;
 }
 
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 500px;  /* Make it slightly wider */
+    margin: 30px auto;  /* Add more spacing */
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    border: 2px solid #ff6600; /* Add a border for better visibility */
+}
+
+#search-bar {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 18px;  /* Bigger padding */
+    font-size: 18px;
+    border-radius: 30px 0 0 30px;
+    background: #f8f8f8;
+}
+
+#search-btn {
+    border: none;
+    background: #ff6600;
+    color: white;
+    padding: 12px 18px;
+    font-size: 18px;
+    border-radius: 0 30px 30px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-weight: bold;
+}
+
+#search-btn:hover {
+    background: #e65c00;
+}
+
 /* Featured Dishes */
 .menu-preview {
     text-align: center;
@@ -157,6 +212,7 @@ nav a:hover {
     margin: auto;
     overflow: hidden;
     position: relative;
+    transition: all 0.3s ease-in-out;
 }
 .menu-item:hover {
     transform: scale(1.05);
@@ -179,6 +235,321 @@ nav a:hover {
     font-weight: bold;
     color: #d32f2f;
     margin-top: 5px;
+}
+
+/* ✅ Improve Section Headings in Admin Page */
+.admin-panel h2,
+.admin-menu-list h2,
+.admin-about-edit h2,
+.admin-orders h2 {
+    font-size: 26px;  /* Bigger font */
+    font-weight: bold;
+    color: #111312dc; /* Professional Orange */
+    text-transform: uppercase;
+    border-bottom: 3px solid #04f7c2; /* Underline Effect */
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+    letter-spacing: 1px; /* Slight Spacing for Elegance */
+    text-align: center;
+}
+/* ✅ Center Align the Input Fields */
+.admin-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* ✅ Wrap Inputs in a Centered Flexbox */
+.admin-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px; /* Adds spacing between inputs */
+    max-width: 800px;
+    width: 100%;
+}
+
+/* ✅ Adjust Input Fields for Uniform Size */
+.admin-form input[type="text"],
+.admin-form input[type="number"],
+.admin-form input[type="file"] {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 200px;
+}
+
+/* ✅ Center Checkbox with Label */
+.admin-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* ✅ Center Button Below Inputs */
+.admin-panel button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    background: #ff6600;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.admin-panel button:hover {
+    background: #e65c00;
+}
+/* ✅ Center Align & Style the Edit About Us Section */
+.admin-about-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+/* ✅ Style the Textarea */
+.admin-about-edit textarea {
+    width: 100%;
+    height: 120px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+}
+
+/* ✅ Style the Update Button */
+.admin-about-edit button {
+    margin-top: 10px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    background: #ff6600;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.admin-about-edit button:hover {
+    background: #e65c00;
+}
+
+/* Order Cards */
+/* Orders Container - Flexbox for Side-by-Side Layout */
+#orders-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to next row if needed */
+    gap: 20px; /* Spacing between cards */
+    justify-content: center; /* Centers items */
+    padding: 20px;
+}
+
+/* Order Card Styling */
+.order-item {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: calc(33.33% - 40px); /* Adjusts to fit three cards in a row with spacing */
+    max-width: 350px;
+    min-width: 280px;
+    transition: all 0.3s ease-in-out;
+    border-left: 5px solid #ff6600;
+}
+
+/* Responsive Grid: Adjust for smaller screens */
+@media (max-width: 1024px) {
+    .order-item {
+        width: calc(50% - 40px); /* Two cards per row on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .order-item {
+        width: calc(100% - 40px); /* Single card per row on small screens */
+    }
+}
+
+/* Order Text Styling */
+.order-item h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.order-item p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* Order Buttons */
+.order-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.order-buttons button {
+    background: #ff6600;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    font-size: 14px;
+}
+
+.order-buttons button:hover {
+    background: #e65c00;
+}
+/* About Us Page Styling */
+.about {
+    text-align: center;
+    max-width: 900px;
+    margin: 100px auto; /* Centers the section */
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Soft shadow effect */
+}
+
+/* About Us Heading */
+.about h2 {
+    font-size: 42px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    color: #f8b400; /* Golden color for emphasis */
+    letter-spacing: 2px;
+}
+
+/* About Us Text */
+.about p {
+    font-size: 22px;
+    line-height: 1.8;
+    font-weight: 400;
+    margin-bottom: 15px;
+    padding: 0 20px;
+}
+
+/* Make sure the background looks good */
+.about-page {
+    background: url('assets/about.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+/* About Us Location Styling */
+.location {
+    text-align: center;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9); /* Light background */
+    border-radius: 12px;
+    color: black;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.location h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #f8b400; /* Golden color */
+    margin-bottom: 15px;
+}
+
+.location p {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+/* Google Map */
+.map-container {
+    width: 100%;
+    height: 400px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ✅ Admin Password Panel */
+#password-protect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh; /* Center vertically */
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 100px auto; /* Center horizontally */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+/* ✅ Admin Heading */
+#password-protect h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #f8b400;
+}
+
+/* ✅ Password Input */
+#admin-password {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #f8b400;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* ✅ Enter Button */
+#password-protect button {
+    background: #f8b400;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+#password-protect button:hover {
+    background: #ff9800;
+}
+
+/* ✅ Error Message */
+#error-message {
+    color: #ff4d4d;
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: bold;
 }
 
 /* Footer */
