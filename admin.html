@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Admin Panel - K-fash Mediterranean cuisine</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>International Grocery Restaurant</h1>
+        <h1>K-fash Mediterranean cuisine</h1>
     </header>
     <nav class="navbar">
         <a href="index.html">Home</a>
-        <a href="about.html">About us</a>
         <a href="menu.html">Menu</a>
+        <a href="about.html">About us</a>
         <a href="admin.html">Admin</a>
     </nav>
 
@@ -43,10 +43,16 @@
             <textarea id="about-description" rows="5" cols="50"></textarea>
             <button onclick="updateAboutUs()">Update Description</button>
         </section>
+
+        <!-- ✅ Display Contact Messages -->
+        <section class="admin-messages">
+            <h2>Contact Messages</h2>
+            <div id="messages-list"><p>Loading messages...</p></div>
+        </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
+        <p>&copy; 2025 K-fash Mediterranean cuisine. All rights reserved.</p>
     </footer>
 
     <!-- ✅ Firebase SDKs -->
@@ -66,6 +72,7 @@
             console.log("Firestore is available:", db);
             fetchMenuItems();
             fetchAboutUs();
+            fetchMessages(); // Fetch messages on page load
         });
 
         // ✅ Add New Menu Item (Base64 Image)
@@ -152,7 +159,40 @@
             await db.collection("about").doc("description").set({ text: newDescription });
             alert("About Us updated!");
         }
-    </script>
 
+        // ✅ Fetch and Display Messages
+        async function fetchMessages() {
+            const messagesList = document.getElementById("messages-list");
+            messagesList.innerHTML = "<p>Loading messages...</p>";
+
+            try {
+                const querySnapshot = await db.collection("messages").orderBy("timestamp", "desc").get();
+                messagesList.innerHTML = "";
+
+                if (querySnapshot.empty) {
+                    messagesList.innerHTML = "<p>No messages available.</p>";
+                    return;
+                }
+
+                querySnapshot.forEach(doc => {
+                    const message = doc.data();
+                    const timestamp = message.timestamp ? message.timestamp.toDate().toLocaleString() : "N/A";
+
+                    messagesList.innerHTML += `
+                        <div class="message-item">
+                            <p><strong>Name:</strong> ${message.name}</p>
+                            <p><strong>Email:</strong> ${message.email}</p>
+                            <p><strong>Message:</strong> ${message.message}</p>
+                            <p><strong>Timestamp:</strong> ${timestamp}</p>
+                            <hr>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+                messagesList.innerHTML = "<p>Error loading messages.</p>";
+            }
+        }
+    </script>
 </body>
 </html>
