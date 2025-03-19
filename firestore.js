@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
-            window.db = firebase.firestore(); // ✅ Global Firestore Instance
+            window.db = firebase.firestore();  // ✅ Global Firestore Instance
             console.log("Firestore initialized:", db);
         } else {
             console.log("Firebase already initialized.");

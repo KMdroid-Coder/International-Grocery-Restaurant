@@ -3,46 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K-fash Mediterranean cuisine</title>
+    <title>International Grocery Restaurant</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header>
-        <h1>K-fash Mediterranean cuisine</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About us</a>
+<body class="index-page">
+    <nav>
+        <div class="nav-brand">
+            <img src="assets/logo.png" alt="International Grocery Restaurant Logo" class="nav-logo">
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="about.html">About Us</a>
             <a href="menu.html">Menu</a>
+            <a href="contact.html">Contact Us</a>
             <a href="admin.html">Admin</a>
-            <a href="contact.html">Contact Us</a> <!-- Ensure this link is correct -->
-        </nav>
+        </div>
+    </nav>
+    
+    <header class="hero">
+        <div class="hero-content">
+            <h1>International Grocery Restaurant</h1>
+            <h2>Flavors Inspired by the Seasons</h2>
+            <p>Come with family & feel the joy of mouthwatering food</p>
+            <button class="cta-button" onclick="location.href='menu.html'">View Our Menu</button>
+        </div>
     </header>
+    
     <main>
-        <section class="hero">
-            <h2>Welcome to K-fash Mediterranean cuisine</h2>
-            <p>Explore a world of flavors with our authentic international dishes.</p>
-            <a href="menu.html" class="cta-button">View Menu</a> <!-- Call-to-Action Button -->
-        </section>
         <section class="menu-preview">
             <h2>Featured Dishes</h2>
-            <div id="menu-grid" class="menu-grid"><p>Loading featured dishes...</p></div>
+            <div id="menu-grid" class="menu-grid"></div>
         </section>
     </main>
+    
     <footer>
-        <p>&copy; 2025 K-fash Mediterranean cuisine. All rights reserved.</p>
+        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
     </footer>
-
-    <!-- ✅ Firebase SDKs -->
+    
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-    <!-- ✅ Load Firestore Setup -->
     <script src="firestore.js"></script>
-
+    
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             console.log("Waiting for Firestore to load...");
-
             const checkFirestore = setInterval(() => {
                 if (typeof db !== "undefined") {
                     clearInterval(checkFirestore);
@@ -55,7 +60,7 @@
         function fetchFeaturedMenu() {
             const menuGrid = document.getElementById("menu-grid");
             menuGrid.innerHTML = "<p>Loading featured dishes...</p>";
-
+            
             db.collection("menu").where("featured", "==", true).get()
             .then((querySnapshot) => {
                 menuGrid.innerHTML = "";
@@ -69,9 +74,9 @@
                     const item = doc.data();
                     const imageUrl = item.image ? item.image : "default-image.jpg";
                     const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A";
-
+                    
                     menuGrid.innerHTML += `
-                        <div class="menu-tile">
+                        <div class="menu-item">
                             <img src="${imageUrl}" alt="${item.name}" class="menu-img">
                             <h3>${item.name}</h3>
                             <p class="price">${price}</p>

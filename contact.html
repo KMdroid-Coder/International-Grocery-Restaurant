@@ -3,23 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - K-fash Mediterranean cuisine</title>
+    <title>Contact Us - International Grocery Restaurant</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="firestore.js"></script> <!-- Ensure Firestore is initialized -->
 </head>
-<body>
+<body class="contact-page">
     <header>
-        <h1>K-fash Mediterranean cuisine</h1>
+        <h1>International Grocery Restaurant</h1>
     </header>
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="about.html">About us</a>
-        <a href="menu.html">Menu</a>
-        <a href="admin.html">Admin</a>
-        <a href="contact.html">Contact Us</a>
+    <nav>
+        <div class="nav-brand">
+            <img src="assets/logo.png" alt="International Grocery Restaurant Logo" class="nav-logo">
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="menu.html">Menu</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="admin.html">Admin</a>
+        </div>
     </nav>
     <main>
         <section class="contact">
@@ -34,7 +39,7 @@
         </section>
     </main>
     <footer>
-        <p>&copy; 2025 K-fash Mediterranean cuisine. All rights reserved.</p>
+        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
     </footer>
 
     <script>
