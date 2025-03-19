@@ -48,6 +48,13 @@ body {
     background-position: center center !important;
 }
 
+/* Order Page Background */
+.order-page {
+    background: url('assets/order.jpg') no-repeat center center fixed;
+    background-size: cover !important; /* ✅ Forces full image coverage */
+    background-position: center center !important;
+}
+
 /* Navigation Bar */
 nav {
     background: rgba(0, 0, 0, 0.8);

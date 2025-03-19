@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order - International Grocery Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .order-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+        .order-form, .order-summary {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 48%;
+        }
+        .order-summary {
+            background: rgba(0, 0, 0, 0.7); /* Darker semi-transparent background */
+            color: white;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .menu-item label {
+            margin-left: 10px;
+        }
+        .order-summary h2, .order-summary p, .order-summary ul {
+            color: white;
+        }
+    </style>
+</head>
+<body class="order-page">
+    <header>
+        <h1>Place Your Order</h1>
+    </header>
+    <nav>
+        <div class="nav-brand">
+            <img src="assets/logo.png" alt="International Grocery Restaurant Logo" class="nav-logo">
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="menu.html">Menu</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="admin.html" id="admin-link">Admin</a>
+        </div>
+    </nav>
+    <main>
+        <section class="order-container">
+            <div class="order-form">
+                <h2>Order Details</h2>
+                <form id="order-form">
+                    <input type="text" id="customer-name" placeholder="Your Name" required>
+                    <input type="tel" id="customer-phone" placeholder="Your Contact Number" required>
+                    <h3>Select Items</h3>
+                    <div id="menu-options"></div> <!-- Dynamic Menu Options -->
+                    <button type="submit">Submit Order</button>
+                </form>
+                <p id="order-status" style="color: green; display: none;">Order placed successfully!</p>
+            </div>
+            <div class="order-summary">
+                <h2>Order Summary</h2>
+                <ul id="order-items"></ul>
+                <p><strong>Total:</strong> <span id="total-price">$0.00</span></p>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firestore.js"></script> <!-- Firestore Setup -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const menuOptions = document.getElementById("menu-options");
+            const orderItems = document.getElementById("order-items");
+            const totalPriceElement = document.getElementById("total-price");
+            let total = 0;
+
+            async function fetchMenuItems() {
+                const querySnapshot = await db.collection("menu").get();
+                menuOptions.innerHTML = "";
+                querySnapshot.forEach(doc => {
+                    const item = doc.data();
+                    const menuItem = document.createElement("div");
+                    menuItem.classList.add("menu-item");
+                    menuItem.innerHTML = `
+                        <input type="checkbox" data-name="${item.name}" data-price="${item.price}">
+                        <label>${item.name} - $${item.price}</label>
+                    `;
+                    menuOptions.appendChild(menuItem);
+                });
+            }
+
+            document.getElementById("order-form").addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const name = document.getElementById("customer-name").value.trim();
+                const phone = document.getElementById("customer-phone").value.trim();
+                const selectedItems = Array.from(document.querySelectorAll("#menu-options input:checked"))
+                    .map(input => ({ name: input.dataset.name, price: input.dataset.price }));
+                if (!name || !phone || selectedItems.length === 0) {
+                    alert("Please fill in all fields and select at least one item.");
+                    return;
+                }
+
+                try {
+                    await db.collection("orders").add({
+                        name,
+                        phone,
+                        items: selectedItems,
+                        total: total,
+                        status: "new",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    console.log("Order saved to Firestore.");
+                    document.getElementById("order-status").style.display = "block";
+                    e.target.reset();
+                    orderItems.innerHTML = "";
+                    totalPriceElement.innerText = "$0.00";
+                } catch (error) {
+                    console.error("Error saving order:", error);
+                    alert("Failed to place order. Please try again later.");
+                }
+            });
+
+            menuOptions.addEventListener("change", function () {
+                total = 0;
+                orderItems.innerHTML = "";
+                document.querySelectorAll("#menu-options input:checked").forEach(input => {
+                    total += parseFloat(input.dataset.price);
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${input.dataset.name} - $${input.dataset.price}`;
+                    orderItems.appendChild(listItem);
+                });
+                totalPriceElement.innerText = `$${total.toFixed(2)}`;
+            });
+
+            fetchMenuItems();
+        });
+    </script>
+</body>
+</html>
