@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - K-fash Mediterranean cuisine</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firestore.js"></script> <!-- Ensure Firestore is initialized -->
 </head>
 <body>
     <header>
@@ -34,7 +38,7 @@
     </footer>
 
     <script>
-        document.getElementById("contact-form").addEventListener("submit", function (e) {
+        document.getElementById("contact-form").addEventListener("submit", async function (e) {
             e.preventDefault();
             const name = document.getElementById("name").value.trim();
             const email = document.getElementById("email").value.trim();
@@ -45,10 +49,21 @@
                 return;
             }
 
-            // Simulate sending the message
-            console.log("Message sent:", { name, email, message });
-            document.getElementById("form-status").style.display = "block";
-            e.target.reset();
+            try {
+                // Save the message to Firestore
+                await db.collection("messages").add({
+                    name,
+                    email,
+                    message,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                console.log("Message saved to Firestore.");
+                document.getElementById("form-status").style.display = "block";
+                e.target.reset();
+            } catch (error) {
+                console.error("Error saving message:", error);
+                alert("Failed to send message. Please try again later.");
+            }
         });
     </script>
 </body>

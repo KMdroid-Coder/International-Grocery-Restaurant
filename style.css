@@ -216,3 +216,32 @@ footer {
 .contact button:hover {
     background-color: #b71c1c;
 }
+
+/* Messages Section Styling */
+.admin-messages {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+.message-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+.message-item p {
+    margin: 5px 0;
+}
+
+.message-item hr {
+    margin-top: 10px;
+    border: none;
+    border-top: 1px solid #ddd;
+}
