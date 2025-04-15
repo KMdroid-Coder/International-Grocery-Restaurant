@@ -733,7 +733,6 @@ footer {
     width: 100%;
 }
 
-
 .dashboard-tabs {
     display: flex;
     gap: 10px;
@@ -783,24 +782,24 @@ body:not(.index-page) main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-  
-  .login-box {
+}
+
+.login-box {
     background: #222;
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     text-align: center;
     width: 300px;
-  }
-  
-  .login-box h2 {
+}
+
+.login-box h2 {
     margin-bottom: 20px;
     font-size: 1.6rem;
     color: #fff;
-  }
-  
-  .login-box input {
+}
+
+.login-box input {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -809,9 +808,9 @@ body:not(.index-page) main {
     font-size: 1rem;
     background-color: #333;
     color: white;
-  }
-  
-  .login-box button {
+}
+
+.login-box button {
     padding: 10px 20px;
     background-color: crimson;
     color: white;
@@ -820,25 +819,25 @@ body:not(.index-page) main {
     cursor: pointer;
     width: 100%;
     font-size: 1rem;
-  }
-  
-  .login-box button:hover {
+}
+
+.login-box button:hover {
     background-color: darkred;
-  }
-  
-  .forgot-password {
+}
+
+.forgot-password {
     margin-top: 10px;
     display: block;
     font-size: 0.9rem;
     color: #aaa;
     text-decoration: none;
-  }
-  
-  .forgot-password:hover {
+}
+
+.forgot-password:hover {
     color: white;
     text-decoration: underline;
-  }
-  
+}
+
 .dashboard-tile {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
@@ -877,4 +876,3 @@ body:not(.index-page) main {
     max-width: 1200px;
     margin: auto;
 }
-
