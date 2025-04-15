@@ -110,10 +110,14 @@
                     const menuItem = document.createElement("div");
                     menuItem.classList.add("menu-item");
                     menuItem.innerHTML = `
-                    <label>
-                        ${item.name} - $${item.price}
-                        <input type="number" min="0" value="0" data-name="${item.name}" data-price="${item.price}" style="margin-left:10px; width:60px;">
-                    </label>
+                        <label>
+                            ${item.name} - $${item.price}
+                                <input type="number" min="0" value="0"
+                                data-name="${item.name}"
+                                data-price="${item.price}"
+                                data-preptime="${item.prepTime || 0}"
+                                style="margin-left:10px; width:60px;">
+                        </label>
                     `;
                     menuOptions.appendChild(menuItem);
                 });
@@ -128,8 +132,17 @@
                     .map(input => ({
                         name: input.dataset.name,
                         price: parseFloat(input.dataset.price),
-                        quantity: parseInt(input.value)
+                        quantity: parseInt(input.value),
+                        prepTime: parseInt(input.dataset.preptime)
                     }));
+                const prepTime = selectedItems.reduce((max, item) =>
+                    item.quantity > 0 && item.prepTime > max ? item.prepTime : max, 0);
+
+                const now = new Date();
+                const readyBy = new Date(now.getTime() + prepTime * 60000);
+                const readyTimeStr = readyBy.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+
 
                 if (!name || !phone || selectedItems.length === 0) {
                     alert("Please fill in all fields and select at least one item.");
@@ -143,10 +156,19 @@
                         items: selectedItems,
                         total: total,
                         status: "new",
+                        prepTime: prepTime,
+                        readyBy: firebase.firestore.Timestamp.fromDate(readyBy),
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
+
                     console.log("Order saved to Firestore.");
+                    document.getElementById("order-status").innerHTML = `
+                    ✅ Order placed!<br>
+                    Estimated Pickup Time: <strong>${readyTimeStr}</strong><br>
+                    Pickup Address: <strong>123 Main St, Fayetteville</strong>
+                    `;
                     document.getElementById("order-status").style.display = "block";
+
                     e.target.reset();
                     orderItems.innerHTML = "";
                     totalPriceElement.innerText = "$0.00";
