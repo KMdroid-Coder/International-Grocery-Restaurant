@@ -11,23 +11,27 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-size: contain; /* Ensures the whole image is visible */
+    background-size: contain;
+    /* Ensures the whole image is visible */
     background-position: center;
-    background-repeat: no-repeat; /* Prevents image from repeating */
+    background-repeat: no-repeat;
+    /* Prevents image from repeating */
     background-attachment: fixed;
 }
 
 /* Home Page (Index Page) Background */
 .index-page {
     background: url('assets/restaurant.jpg') no-repeat center center fixed;
-    background-size: cover !important; /* ✅ Forces full image coverage */
+    background-size: cover !important;
+    /* ✅ Forces full image coverage */
     background-position: center center !important;
 }
 
 /* Menu Page Background */
 .menu-page {
     background: url('assets/menu.jpg') no-repeat center center fixed;
-    background-size: cover !important; /* ✅ Forces full image coverage */
+    background-size: cover !important;
+    /* ✅ Forces full image coverage */
     background-position: center center !important;
 }
 
@@ -39,23 +43,27 @@ body {
 /* Contact Page Background */
 .contact-page {
     background: url('assets/contact.jpg') no-repeat center center fixed;
-    background-size: cover !important; /* ✅ Forces full image coverage */
+    background-size: cover !important;
+    /* ✅ Forces full image coverage */
     background-position: center center !important;
 }
 
 /* Admin Page Background */
 .admin-page {
     background: url('assets/admin.jpg') no-repeat center center fixed;
-    background-size: cover !important; /* ✅ Forces full image coverage */
+    background-size: cover !important;
+    /* ✅ Forces full image coverage */
     background-position: center center !important;
 }
 
 /* Order Page Background */
 .order-page {
     background: url('assets/order.jpg') no-repeat center center fixed;
-    background-size: cover !important; /* ✅ Forces full image coverage */
+    background-size: cover !important;
+    /* ✅ Forces full image coverage */
     background-position: center center !important;
 }
+
 
 /* Navigation Bar */
 nav {
@@ -69,18 +77,22 @@ nav {
     top: 0;
     z-index: 1000;
 }
+
 .nav-brand {
     display: flex;
     align-items: center;
     padding-left: 20px;
 }
+
 .nav-brand img {
     height: 50px;
     width: auto;
 }
+
 .nav-links {
     display: flex;
 }
+
 nav a {
     color: white;
     margin: 15px;
@@ -89,6 +101,7 @@ nav a {
     font-weight: bold;
     transition: color 0.3s;
 }
+
 nav a:hover {
     color: #f8b400;
 }
@@ -104,17 +117,21 @@ nav a:hover {
     background: rgba(0, 0, 0, 0.6);
     padding: 20px;
     width: 100%;
+    padding-top: 120px; /* Adjust to match your navbar height */
 }
+
 .hero-content {
     text-align: center;
-    color: #ffffff; /* White text for contrast */
+    color: #ffffff;
+    /* White text for contrast */
     padding: 50px 20px;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 .hero-content h1 {
-    font-family: 'Bebas Neue', sans-serif; /* Strong, bold, and modern font */
+    font-family: 'Bebas Neue', sans-serif;
+    /* Strong, bold, and modern font */
     font-size: 50px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -123,12 +140,14 @@ nav a:hover {
 }
 
 .hero-content h2 {
-    font-family: 'Poppins', sans-serif; /* Clean and modern font */
+    font-family: 'Poppins', sans-serif;
+    /* Clean and modern font */
     font-size: 28px;
     font-weight: 500;
     margin-bottom: 10px;
     text-transform: capitalize;
-    color: #ffcc00; /* Warm golden tone for luxury appeal */
+    color: #ffcc00;
+    /* Warm golden tone for luxury appeal */
 }
 
 .hero-content h3 {
@@ -141,7 +160,8 @@ nav a:hover {
 }
 
 .cta-button {
-    background-color: #ff6600; /* Eye-catching and warm button color */
+    background-color: #ff6600;
+    /* Eye-catching and warm button color */
     color: white;
     font-size: 18px;
     font-weight: bold;
@@ -181,20 +201,24 @@ nav a:hover {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    max-width: 500px;  /* Make it slightly wider */
-    margin: 30px auto;  /* Add more spacing */
+    max-width: 500px;
+    /* Make it slightly wider */
+    margin: 30px auto;
+    /* Add more spacing */
     background: white;
     border-radius: 30px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
     padding: 8px;
-    border: 2px solid #ff6600; /* Add a border for better visibility */
+    border: 2px solid #ff6600;
+    /* Add a border for better visibility */
 }
 
 #search-bar {
     flex: 1;
     border: none;
     outline: none;
-    padding: 12px 18px;  /* Bigger padding */
+    padding: 12px 18px;
+    /* Bigger padding */
     font-size: 18px;
     border-radius: 30px 0 0 30px;
     background: #f8f8f8;
@@ -222,6 +246,7 @@ nav a:hover {
     padding: 40px;
     background: rgba(0, 0, 0, 0.7);
 }
+
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -229,6 +254,7 @@ nav a:hover {
     padding: 20px;
     justify-content: center;
 }
+
 .menu-item {
     background: white;
     color: black;
@@ -243,10 +269,12 @@ nav a:hover {
     position: relative;
     transition: all 0.3s ease-in-out;
 }
+
 .menu-item:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
+
 .menu-img {
     width: 100%;
     height: 220px;
@@ -254,11 +282,13 @@ nav a:hover {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
+
 .menu-item h3 {
     font-size: 20px;
     font-weight: bold;
     margin-top: 10px;
 }
+
 .menu-item .price {
     font-size: 18px;
     font-weight: bold;
@@ -271,16 +301,21 @@ nav a:hover {
 .admin-menu-list h2,
 .admin-about-edit h2,
 .admin-orders h2 {
-    font-size: 26px;  /* Bigger font */
+    font-size: 26px;
+    /* Bigger font */
     font-weight: bold;
-    color: #111312dc; /* Professional Orange */
+    color: #111312dc;
+    /* Professional Orange */
     text-transform: uppercase;
-    border-bottom: 3px solid #04f7c2; /* Underline Effect */
+    border-bottom: 3px solid #04f7c2;
+    /* Underline Effect */
     padding-bottom: 5px;
     margin-bottom: 20px;
-    letter-spacing: 1px; /* Slight Spacing for Elegance */
+    letter-spacing: 1px;
+    /* Slight Spacing for Elegance */
     text-align: center;
 }
+
 /* ✅ Center Align the Input Fields */
 .admin-panel {
     display: flex;
@@ -294,7 +329,8 @@ nav a:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px; /* Adds spacing between inputs */
+    gap: 10px;
+    /* Adds spacing between inputs */
     max-width: 800px;
     width: 100%;
 }
@@ -336,6 +372,7 @@ nav a:hover {
 .admin-panel button:hover {
     background: #e65c00;
 }
+
 /* ✅ Center Align & Style the Edit About Us Section */
 .admin-about-edit {
     display: flex;
@@ -383,9 +420,12 @@ nav a:hover {
 /* Orders Container - Flexbox for Side-by-Side Layout */
 #orders-container {
     display: flex;
-    flex-wrap: wrap; /* Allows wrapping to next row if needed */
-    gap: 20px; /* Spacing between cards */
-    justify-content: center; /* Centers items */
+    flex-wrap: wrap;
+    /* Allows wrapping to next row if needed */
+    gap: 20px;
+    /* Spacing between cards */
+    justify-content: center;
+    /* Centers items */
     padding: 20px;
 }
 
@@ -397,7 +437,8 @@ nav a:hover {
     border-radius: 10px;
     text-align: left;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: calc(33.33% - 40px); /* Adjusts to fit three cards in a row with spacing */
+    width: calc(33.33% - 40px);
+    /* Adjusts to fit three cards in a row with spacing */
     max-width: 350px;
     min-width: 280px;
     transition: all 0.3s ease-in-out;
@@ -407,13 +448,15 @@ nav a:hover {
 /* Responsive Grid: Adjust for smaller screens */
 @media (max-width: 1024px) {
     .order-item {
-        width: calc(50% - 40px); /* Two cards per row on medium screens */
+        width: calc(50% - 40px);
+        /* Two cards per row on medium screens */
     }
 }
 
 @media (max-width: 768px) {
     .order-item {
-        width: calc(100% - 40px); /* Single card per row on small screens */
+        width: calc(100% - 40px);
+        /* Single card per row on small screens */
     }
 }
 
@@ -423,6 +466,7 @@ nav a:hover {
     font-weight: bold;
     margin-bottom: 5px;
 }
+
 .order-item p {
     font-size: 16px;
     margin: 5px 0;
@@ -449,16 +493,20 @@ nav a:hover {
 .order-buttons button:hover {
     background: #e65c00;
 }
+
 /* About Us Page Styling */
 .about {
     text-align: center;
     max-width: 900px;
-    margin: 100px auto; /* Centers the section */
+    margin: 100px auto;
+    /* Centers the section */
     padding: 40px;
-    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    background: rgba(0, 0, 0, 0.7);
+    /* Dark semi-transparent background */
     border-radius: 12px;
     color: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Soft shadow effect */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    /* Soft shadow effect */
 }
 
 /* About Us Heading */
@@ -467,7 +515,8 @@ nav a:hover {
     font-weight: bold;
     text-transform: uppercase;
     margin-bottom: 15px;
-    color: #f8b400; /* Golden color for emphasis */
+    color: #f8b400;
+    /* Golden color for emphasis */
     letter-spacing: 2px;
 }
 
@@ -485,13 +534,15 @@ nav a:hover {
     background: url('assets/about.jpg') no-repeat center center fixed;
     background-size: cover;
 }
+
 /* About Us Location Styling */
 .location {
     text-align: center;
     max-width: 900px;
     margin: 50px auto;
     padding: 30px;
-    background: rgba(255, 255, 255, 0.9); /* Light background */
+    background: rgba(255, 255, 255, 0.9);
+    /* Light background */
     border-radius: 12px;
     color: black;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -500,7 +551,8 @@ nav a:hover {
 .location h2 {
     font-size: 36px;
     font-weight: bold;
-    color: #f8b400; /* Golden color */
+    color: #f8b400;
+    /* Golden color */
     margin-bottom: 15px;
 }
 
@@ -525,13 +577,16 @@ nav a:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 50vh; /* Center vertically */
+    height: 50vh;
+    /* Center vertically */
     text-align: center;
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.6);
+    /* Semi-transparent background */
     padding: 30px;
     border-radius: 10px;
     max-width: 400px;
-    margin: 100px auto; /* Center horizontally */
+    margin: 100px auto;
+    /* Center horizontally */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     color: white;
 }
@@ -583,7 +638,8 @@ nav a:hover {
 
 
 .order-now {
-    background-color: #ff6600; /* Eye-catching color */
+    background-color: #ff6600;
+    /* Eye-catching color */
     color: white;
     font-size: 16px;
     font-weight: bold;
@@ -596,7 +652,8 @@ nav a:hover {
 }
 
 .order-now:hover {
-    background-color: #e65c00; /* Darker shade on hover */
+    background-color: #e65c00;
+    /* Darker shade on hover */
     transform: scale(1.05);
 }
 
@@ -674,5 +731,150 @@ footer {
     font-size: 14px;
     margin-top: auto;
     width: 100%;
+}
+
+
+.dashboard-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.dashboard-tabs button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #444;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dashboard-tabs button:hover {
+    background-color: #666;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    margin: 0 10px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    background-color: #333;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    background-color: #555;
+}
+
+/* ✅ Apply margin only to non-index pages */
+body:not(.index-page) header,
+body:not(.index-page) main {
+    margin-top: 110px;
+}
+
+.login-container {
+    margin-top: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login-box {
+    background: #222;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    width: 300px;
+  }
+  
+  .login-box h2 {
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    color: #fff;
+  }
+  
+  .login-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #333;
+    color: white;
+  }
+  
+  .login-box button {
+    padding: 10px 20px;
+    background-color: crimson;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+  }
+  
+  .login-box button:hover {
+    background-color: darkred;
+  }
+  
+  .forgot-password {
+    margin-top: 10px;
+    display: block;
+    font-size: 0.9rem;
+    color: #aaa;
+    text-decoration: none;
+  }
+  
+  .forgot-password:hover {
+    color: white;
+    text-decoration: underline;
+  }
+  
+.dashboard-tile {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.dashboard-tile:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-tile h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.dashboard-tile p {
+    font-size: 0.95rem;
+    color: #ddd;
+}
+
+.dashboard-container {
+    padding: 40px 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: auto;
 }
 

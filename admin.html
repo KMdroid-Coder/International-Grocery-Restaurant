@@ -1,243 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body class="admin-page">
-    <header>
-        <h1>International Grocery Restaurant - Admin Panel</h1>
-    </header>
-    
+  <header>
+    <h1>International Grocery Restaurant - Admin Login</h1>
+  </header>
 
-    <nav>
-        <div class="nav-brand">
-            <a href="index.html">
-                <img src="assets/logo.png" alt="International Grocery Restaurant Logo" class="nav-logo">
-            </a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="about.html">About Us</a>
-            <a href="menu.html">Menu</a>
-            <a href="contact.html">Contact Us</a>
-            <a href="admin.html" class="active">Admin</a>
-        </div>
-    </nav>
-
-    <div id="password-protect">
-        <h2>Admin Access</h2>
-        <input type="password" id="admin-password" placeholder="Enter Admin Password">
-        <button onclick="checkPassword()">Enter</button>
-        <p id="error-message" style="color: red; display: none;">Incorrect Password. Try again.</p>
+  <nav>
+    <div class="nav-brand">
+      <a href="index.html">
+        <img src="assets/logo.png" alt="International Grocery Restaurant Logo" class="nav-logo" />
+      </a>
     </div>
-        <!-- ✅ Admin Panel (Initially Hidden) -->
-    <div id="admin-panel" style="display: none;">
-        
-    <main>
-        <!-- ✅ Add New Menu Item -->
-        <section class="admin-panel">
-            <h2>Add New Menu Item</h2>
-            <div class="admin-form">
-                <input type="text" id="name" placeholder="Item Name" required>
-                <input type="text" id="description" placeholder="Description" required>
-                <input type="number" id="price" placeholder="Price" step="0.01" required>
-                <input type="file" id="imageUpload" accept="image/*">
-            </div>
-        
-            <div class="admin-checkbox">
-                <input type="checkbox" id="featured"> <label for="featured">Feature on Homepage</label>
-            </div>
-        
-            <button onclick="addMenuItem()">Add Item</button>
-        </section>
-        
-        <!-- ✅ Manage Menu Items -->
-        <section class="admin-menu-list">
-            <h2>Manage Menu Items</h2>
-            <div id="menu-list" class="menu-grid"></div>
-        </section>
-
-        <!-- ✅ Edit About Us -->
-        <section class="admin-about-edit">
-            <h2>Edit About Us</h2>
-            <textarea id="about-description" rows="5" placeholder="Write about your restaurant..."></textarea>
-            <button onclick="updateAboutUs()">Update Description</button>
-        </section>
-        
-        <!-- ✅ Manage Orders -->
-        <section class="admin-orders">
-            <h2>New Orders</h2>
-            <div id="orders-container"></div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
-    </footer>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="menu.html">Menu</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="admin.html" class="active">Admin</a>
     </div>
+  </nav>
 
-    <script>
-        function checkPassword() {
-            const enteredPassword = document.getElementById("admin-password").value;
-            const correctPassword = "Admin123"; // 🔒 Change this to your real password
+<!-- Password Section -->
+<div class="login-container">
+    <div class="login-box">
+      <h2>Admin Access</h2>
+      <input type="password" id="admin-password" placeholder="Enter Admin Password" />
+      <button onclick="checkPassword()">Enter</button>
+      <a href="#" class="forgot-password">Forgot password?</a>
+      <p id="error-message" style="color: red; display: none;">Incorrect Password. Try again.</p>
+    </div>
+  </div>
+  
 
-            if (enteredPassword === correctPassword) {
-                document.getElementById("password-protect").style.display = "none";
-                document.getElementById("admin-panel").style.display = "block";
-            } else {
-                document.getElementById("error-message").style.display = "block";
-            }
-        }
-    </script>
+  <footer>
+    <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
+  </footer>
 
-    <!-- ✅ Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="firestore.js"></script>
+  <script>
+    function checkPassword() {
+      const enteredPassword = document.getElementById("admin-password").value;
+      const correctPassword = "Admin123";
 
-    <!-- ✅ JavaScript Functions -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            if (typeof db === "undefined") {
-                console.error("Firestore not initialized. Check firestore.js.");
-                return;
-            }
-            console.log("Firestore is available:", db);
-            fetchMenuItems();
-            fetchAboutUs();
-            loadOrders();
-        });
+      if (enteredPassword === correctPassword) {
+        localStorage.setItem("adminLoggedIn", "true");
+        window.location.href = "dashboard.html";
+      } else {
+        document.getElementById("error-message").style.display = "block";
+      }
+    }
 
-        // ✅ Add Menu Item
-        async function addMenuItem() {
-            const name = document.getElementById("name").value.trim();
-            const description = document.getElementById("description").value.trim();
-            const price = document.getElementById("price").value;
-            const featured = document.getElementById("featured").checked;
-            const imageFile = document.getElementById("imageUpload").files[0];
-
-            if (!name || !description || !price || !imageFile) {
-                alert("Please fill in all fields and select an image.");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.readAsDataURL(imageFile);
-            reader.onloadend = async function () {
-                const base64String = reader.result;
-
-                try {
-                    await db.collection("menu").add({
-                        name,
-                        description,
-                        price: parseFloat(price).toFixed(2),
-                        image: base64String,
-                        featured
-                    });
-
-                    alert("Menu item added!");
-                    fetchMenuItems();
-                } catch (error) {
-                    console.error("Error adding menu item:", error);
-                    alert("Failed to add menu item.");
-                }
-            };
-        }
-
-        // ✅ Fetch & Display Menu Items (4 per row)
-        async function fetchMenuItems() {
-            const menuList = document.getElementById("menu-list");
-            menuList.innerHTML = "";
-            const querySnapshot = await db.collection("menu").get();
-
-            querySnapshot.forEach(doc => {
-                const item = doc.data();
-                const menuItem = document.createElement("div");
-                menuItem.classList.add("menu-item");
-                menuItem.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" class="menu-img">
-                    <${item.name}>
-                    <p>${item.description}</p>
-                    <p class="price">$${item.price}</p>
-                    <button onclick="deleteMenuItem('${doc.id}')">Delete</button>
-                `;
-                menuList.appendChild(menuItem);
-            });
-        }
-
-        // ✅ Delete Menu Item
-        async function deleteMenuItem(id) {
-            if (!confirm("Are you sure you want to delete this item?")) return;
-            await db.collection("menu").doc(id).delete();
-            fetchMenuItems();
-        }
-
-        // ✅ Fetch & Display About Us Section
-        async function fetchAboutUs() {
-            const aboutDoc = await db.collection("about").doc("description").get();
-            if (aboutDoc.exists) {
-                document.getElementById("about-description").value = aboutDoc.data().text;
-            }
-        }
-
-        // ✅ Update About Us Section
-        async function updateAboutUs() {
-            const newDescription = document.getElementById("about-description").value.trim();
-            if (!newDescription) {
-                alert("Description cannot be empty!");
-                return;
-            }
-            await db.collection("about").doc("description").set({ text: newDescription });
-            alert("About Us updated!");
-        }
-
-// ✅ Load Orders with Card Layout
-async function loadOrders() {
-    const ordersContainer = document.getElementById("orders-container");
-    db.collection("orders").where("status", "!=", "completed").onSnapshot(snapshot => {
-        ordersContainer.innerHTML = "";
-        snapshot.forEach(doc => {
-            const order = doc.data();
-            const orderDiv = document.createElement("div");
-            orderDiv.classList.add("order-item");
-            orderDiv.innerHTML = `
-                <h3>Order from ${order.name}</h3>
-                <p><strong>Phone:</strong> ${order.phone}</p>
-                <p><strong>Items:</strong> ${order.items.map(item => item.name).join(", ")}</p>
-                <p><strong>Total:</strong> <span style="color: #d32f2f; font-weight: bold;">$${order.total}</span></p>
-                <div class="order-buttons">
-                    ${order.status === "new" ? `
-                        <button onclick="acceptOrder('${doc.id}')">Accept</button>
-                        <button onclick="rejectOrder('${doc.id}')">Reject</button>
-                    ` : `
-                        <button onclick="markDelivered('${doc.id}')">Delivered</button>
-                        <button onclick="markNotDelivered('${doc.id}')">Not Delivered</button>
-                    `}
-                </div>
-            `;
-            ordersContainer.appendChild(orderDiv);
-        });
+    document.addEventListener("DOMContentLoaded", function () {
+      if (localStorage.getItem("adminLoggedIn")) {
+        window.location.href = "dashboard.html";
+      }
     });
-}
-
-        async function acceptOrder(orderId) {
-            await db.collection("orders").doc(orderId).update({ status: "accepted" });
-        }
-
-        async function rejectOrder(orderId) {
-            await db.collection("orders").doc(orderId).delete();
-        }
-
-        async function markDelivered(orderId) {
-            await db.collection("orders").doc(orderId).update({ status: "completed" });
-        }
-
-        async function markNotDelivered(orderId) {
-            await db.collection("orders").doc(orderId).update({ status: "completed" });
-        }
-    </script>
+  </script>
 </body>
+
 </html>

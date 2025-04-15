@@ -1,30 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - K-fash Mediterranean cuisine</title> <!-- Updated Title -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .order-badge {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background-color: crimson;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+
+        nav {
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-logo {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-links a,
+        .nav-links button {
+            text-decoration: none;
+            color: white;
+            background: #333;
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-links a.active,
+        .nav-links a:hover,
+        .nav-links button:hover {
+            background-color: #555;
+        }
+
+
+        header {
+            margin-top: 110px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        body.admin-dashboard-page {
+            background: url('assets/dboard.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tile-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .order-badge {
+            background-color: crimson;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.2);
+            }
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1>K-fash Mediterranean cuisine</h1> <!-- Updated Name -->
-    </header>
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="menu.html">Menu</a>
-        <a href="admin.html">Admin</a>
+
+<body class="admin-dashboard-page">
+    <nav>
+        <div class="nav-brand">
+            <a href="index.html">
+                <img src="assets/logo.png" alt="International Grocery Restaurant Logo" class="nav-logo" />
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="menu.html">Menu</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="admin.html" class="active">Admin</a>
+            <button onclick="logoutAdmin()"
+                style="margin-left: 20px; background-color: crimson; color: white; border: none; padding: 8px 16px; border-radius: 5px;">Logout</button>
+        </div>
     </nav>
+
+
+    <header>
+        <h1>Admin Dashboard</h1>
+        <p>Quick access to all management tools</p>
+    </header>
+
     <main>
-        <section>
-            <h2>Quick Links</h2>
-            <a href="admin.html" class="cta-button">Manage Menu</a>
-            <a href="admin.html#orders" class="cta-button">View Orders</a>
-            <a href="admin.html#about" class="cta-button">Edit About Us</a>
-        </section>
+        <div class="dashboard-container">
+            <div class="dashboard-tile" onclick="location.href='manage-menu.html'">
+                <h3>Manage Menu</h3>
+                <p>Add, edit, or delete menu items</p>
+            </div>
+            <div class="dashboard-tile" onclick="location.href='edit-about.html'">
+                <h3>Edit About</h3>
+                <p>Update your restaurant's story and mission</p>
+            </div>
+            <div class="dashboard-tile" onclick="location.href='manage-orders.html'" id="orders-tile">
+                <div class="tile-header">
+                    <h3>Manage Orders</h3>
+                    <span id="order-badge" class="order-badge" style="display: none;"></span>
+                </div>
+                <p>View, accept, or complete customer orders</p>
+            </div>
+            <div class="dashboard-tile" onclick="location.href='promotions.html'">
+                <h3>Promotions</h3>
+                <p>Create and manage offers and deals</p>
+            </div>
+            <div class="dashboard-tile" onclick="location.href='reviews-messages.html'">
+                <div class="tile-header">
+                    <h3>Reviews & Messages</h3>
+                    <span id="message-badge" class="order-badge" style="display: none;"></span>
+                </div>
+                <p>View user-submitted messages from the contact form</p>
+            </div>
+            
+
+
+        </div>
     </main>
-    <footer>
-        <p>&copy; 2025 K-fash Mediterranean cuisine. All rights reserved.</p> <!-- Updated Name -->
+
+    <footer style="text-align:center; padding: 20px; background: transparent; color: white;">
+        &copy; 2025 International Grocery Restaurant. All rights reserved.
     </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firestore.js"></script> <!-- If you're using a shared setup -->
+
+    <script>
+        function logoutAdmin() {
+            localStorage.removeItem("adminLoggedIn");
+            alert("You have been logged out.");
+            window.location.href = "admin.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!localStorage.getItem("adminLoggedIn")) {
+                window.location.href = "admin.html";
+                return;
+            }
+
+            if (typeof firebase !== "undefined" && typeof db !== "undefined") {
+                // 🔔 Check pending orders
+                db.collection("orders")
+                    .where("status", "in", ["new", "accepted"])
+                    .get()
+                    .then(snapshot => {
+                        const count = snapshot.size;
+                        const badge = document.getElementById("order-badge");
+                        if (badge && count > 0) {
+                            badge.textContent = count > 9 ? "9+" : count;
+                            badge.style.display = "inline-block";
+                        }
+                    });
+
+                // ✉️ Check unread messages
+                db.collection("messages")
+                    .where("read", "==", false)
+                    .get()
+                    .then(snapshot => {
+                        const count = snapshot.size;
+                        const badge = document.getElementById("message-badge");
+                        if (badge && count > 0) {
+                            badge.textContent = count > 9 ? "9+" : count;
+                            badge.style.display = "inline-block";
+                        }
+                    });
+
+            } else {
+                console.warn("Firestore not initialized.");
+            }
+        });
+
+
+    </script>
+
 </body>
+
 </html>
