@@ -39,6 +39,7 @@
                 <input type="text" id="name" placeholder="Item Name" required />
                 <input type="text" id="description" placeholder="Description" required />
                 <input type="number" id="price" placeholder="Price" step="0.01" required />
+                <input type="number" id="prepTime" placeholder="Preparation Time (minutes)" required>
                 <input type="file" id="imageUpload" accept="image/*" />
             </div>
             <div class="admin-checkbox">
@@ -62,6 +63,7 @@
         <input type="text" id="edit-name" placeholder="Item Name" />
         <input type="text" id="edit-description" placeholder="Description" />
         <input type="number" id="edit-price" placeholder="Price" step="0.01" />
+        <input type="number" id="edit-prepTime" placeholder="Preparation Time (minutes)" />
         <input type="file" id="edit-image" accept="image/*" />
         <label><input type="checkbox" id="edit-featured" /> Feature on Homepage</label>
         <br><br>
@@ -89,6 +91,7 @@
             const name = document.getElementById("name").value.trim();
             const description = document.getElementById("description").value.trim();
             const price = document.getElementById("price").value;
+            const prepTime = document.getElementById("prepTime").value;
             const featured = document.getElementById("featured").checked;
             const imageFile = document.getElementById("imageUpload").files[0];
 
@@ -106,6 +109,7 @@
                         name,
                         description,
                         price: parseFloat(price).toFixed(2),
+                        prepTime: parseInt(prepTime),  // <-- this is the new line
                         image: base64String,
                         featured,
                     });
@@ -131,7 +135,7 @@
                     <h3>${item.name}</h3>
                     <p>${item.description}</p>
                     <p class="price">$${item.price}</p>
-                    <button onclick="editMenuItem('${doc.id}', '${item.name}', '${item.description}', '${item.price}', ${item.featured})">Edit</button>
+                    <button onclick="editMenuItem('${doc.id}', \`${item.name}\`, \`${item.description}\`, '${item.price}', ${item.featured}, ${item.prepTime || 0})">Edit</button>
                     <button onclick="deleteMenuItem('${doc.id}')">Delete</button>
                     `;
                 menuList.appendChild(menuItem);
@@ -153,12 +157,13 @@
         let editingItemId = null;
         let currentImageBase64 = null;
 
-        function editMenuItem(id, name, description, price, featured) {
+        function editMenuItem(id, name, description, price, featured, prepTime) {
             editingItemId = id;
             document.getElementById("edit-name").value = name;
             document.getElementById("edit-description").value = description;
             document.getElementById("edit-price").value = price;
             document.getElementById("edit-featured").checked = featured;
+            document.getElementById("edit-prepTime").value = prepTime || 0;
 
             currentImageBase64 = null; // will update if new image is selected
             document.getElementById("edit-modal").style.display = "block";
@@ -183,6 +188,7 @@
             const updatedName = document.getElementById("edit-name").value.trim();
             const updatedDescription = document.getElementById("edit-description").value.trim();
             const updatedPrice = parseFloat(document.getElementById("edit-price").value).toFixed(2);
+            const updatedPrepTime = parseInt(document.getElementById("edit-prepTime").value) || 0;
             const updatedFeatured = document.getElementById("edit-featured").checked;
 
             if (!updatedName || !updatedDescription || !updatedPrice) {
@@ -194,6 +200,7 @@
                 name: updatedName,
                 description: updatedDescription,
                 price: updatedPrice,
+                prepTime: updatedPrepTime,
                 featured: updatedFeatured
             };
 
