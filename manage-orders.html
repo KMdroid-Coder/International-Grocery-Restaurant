@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Management - Admin</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="admin-page">
+    <header>
+        <h1>Order Management - Admin Panel</h1>
+    </header>
+
+    <nav class="admin-nav">
+        <div class="nav-brand">
+            <a href="index.html">
+                <img src="assets/logo.png" alt="Logo" class="nav-logo" />
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="manage-menu.html">Manage Menu</a>
+            <a href="edit-about.html">Edit About</a>
+            <a href="manage-orders.html" class="active">Orders</a>
+            <a href="promotions.html">Promotions</a>
+            <button onclick="logoutAdmin()"
+                style="margin-left: 20px; background-color: crimson; color: white; border: none; padding: 8px 16px; border-radius: 5px;">Logout</button>
+        </div>
+    </nav>
+
+
+    <main>
+        <section class="admin-orders">
+            <h2>Incoming Orders</h2>
+            <div id="orders-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firestore.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadOrders();
+        });
+
+        function loadOrders() {
+            const ordersContainer = document.getElementById("orders-container");
+            db.collection("orders").where("status", "!=", "completed").onSnapshot(snapshot => {
+                ordersContainer.innerHTML = "";
+                snapshot.forEach(doc => {
+                    const order = doc.data();
+                    const orderDiv = document.createElement("div");
+                    orderDiv.classList.add("order-item");
+                    orderDiv.innerHTML = `
+            <h3>Order from ${order.name}</h3>
+            <p><strong>Phone:</strong> ${order.phone}</p>
+            <p><strong>Items:</strong> ${order.items.map(item => `${item.name} x${item.quantity}`).join(", ")}</p>
+            <p><strong>Total:</strong> <span style="color: #d32f2f; font-weight: bold;">$${order.total}</span></p>
+            <div class="order-buttons">
+              ${order.status === "new" ? `
+                <button onclick="acceptOrder('${doc.id}')">Accept</button>
+                <button onclick="rejectOrder('${doc.id}')">Reject</button>
+              ` : `
+                <button onclick="markDelivered('${doc.id}')">Delivered</button>
+                <button onclick="markNotDelivered('${doc.id}')">Not Delivered</button>
+              `}
+            </div>
+          `;
+                    ordersContainer.appendChild(orderDiv);
+                });
+            });
+        }
+
+        async function acceptOrder(orderId) {
+            await db.collection("orders").doc(orderId).update({ status: "accepted" });
+        }
+
+        async function rejectOrder(orderId) {
+            if (confirm("Are you sure you want to delete this order?")) {
+                await db.collection("orders").doc(orderId).delete();
+            }
+        }
+
+        async function markDelivered(orderId) {
+            await db.collection("orders").doc(orderId).update({ status: "completed" });
+        }
+
+        async function markNotDelivered(orderId) {
+            await db.collection("orders").doc(orderId).update({ status: "completed" });
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem("adminLoggedIn");
+            alert("You have been logged out.");
+            window.location.href = "admin.html";
+        }
+    </script>
+</body>
+
+</html>

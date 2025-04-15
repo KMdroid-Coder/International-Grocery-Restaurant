@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,30 +15,41 @@
             max-width: 900px;
             margin: auto;
         }
-        .order-form, .order-summary {
-            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+
+        .order-form,
+        .order-summary {
+            background: rgba(255, 255, 255, 0.9);
+            /* Semi-transparent white */
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             width: 48%;
         }
+
         .order-summary {
-            background: rgba(0, 0, 0, 0.7); /* Darker semi-transparent background */
+            background: rgba(0, 0, 0, 0.7);
+            /* Darker semi-transparent background */
             color: white;
         }
+
         .menu-item {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
         }
+
         .menu-item label {
             margin-left: 10px;
         }
-        .order-summary h2, .order-summary p, .order-summary ul {
+
+        .order-summary h2,
+        .order-summary p,
+        .order-summary ul {
             color: white;
         }
     </style>
 </head>
+
 <body class="order-page">
     <header>
         <h1>Place Your Order</h1>
@@ -98,8 +110,10 @@
                     const menuItem = document.createElement("div");
                     menuItem.classList.add("menu-item");
                     menuItem.innerHTML = `
-                        <input type="checkbox" data-name="${item.name}" data-price="${item.price}">
-                        <label>${item.name} - $${item.price}</label>
+                    <label>
+                        ${item.name} - $${item.price}
+                        <input type="number" min="0" value="0" data-name="${item.name}" data-price="${item.price}" style="margin-left:10px; width:60px;">
+                    </label>
                     `;
                     menuOptions.appendChild(menuItem);
                 });
@@ -109,8 +123,14 @@
                 e.preventDefault();
                 const name = document.getElementById("customer-name").value.trim();
                 const phone = document.getElementById("customer-phone").value.trim();
-                const selectedItems = Array.from(document.querySelectorAll("#menu-options input:checked"))
-                    .map(input => ({ name: input.dataset.name, price: input.dataset.price }));
+                const selectedItems = Array.from(document.querySelectorAll("#menu-options input[type='number']"))
+                    .filter(input => parseInt(input.value) > 0)
+                    .map(input => ({
+                        name: input.dataset.name,
+                        price: parseFloat(input.dataset.price),
+                        quantity: parseInt(input.value)
+                    }));
+
                 if (!name || !phone || selectedItems.length === 0) {
                     alert("Please fill in all fields and select at least one item.");
                     return;
@@ -136,20 +156,26 @@
                 }
             });
 
-            menuOptions.addEventListener("change", function () {
+            menuOptions.addEventListener("input", function () {
                 total = 0;
                 orderItems.innerHTML = "";
-                document.querySelectorAll("#menu-options input:checked").forEach(input => {
-                    total += parseFloat(input.dataset.price);
-                    const listItem = document.createElement("li");
-                    listItem.textContent = `${input.dataset.name} - $${input.dataset.price}`;
-                    orderItems.appendChild(listItem);
+                document.querySelectorAll("#menu-options input[type='number']").forEach(input => {
+                    const quantity = parseInt(input.value);
+                    if (quantity > 0) {
+                        const itemTotal = quantity * parseFloat(input.dataset.price);
+                        total += itemTotal;
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `${input.dataset.name} x${quantity} - $${itemTotal.toFixed(2)}`;
+                        orderItems.appendChild(listItem);
+                    }
                 });
                 totalPriceElement.innerText = `$${total.toFixed(2)}`;
             });
+
 
             fetchMenuItems();
         });
     </script>
 </body>
+
 </html>

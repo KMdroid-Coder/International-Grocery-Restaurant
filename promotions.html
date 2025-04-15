@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promotions - Admin Panel</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="admin-page">
+    <header>
+        <h1>Manage Promotions - Admin Panel</h1>
+    </header>
+
+    <nav class="admin-nav">
+        <div class="nav-brand">
+            <a href="index.html">
+                <img src="assets/logo.png" alt="Logo" class="nav-logo" />
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="manage-menu.html">Manage Menu</a>
+            <a href="edit-about.html">Edit About</a>
+            <a href="manage-orders.html">Orders</a>
+            <a href="promotions.html" class="active">Promotions</a>
+            <button onclick="logoutAdmin()"
+                style="margin-left: 20px; background-color: crimson; color: white; border: none; padding: 8px 16px; border-radius: 5px;">Logout</button>
+        </div>
+    </nav>
+
+
+    <main>
+        <section class="admin-promotions">
+            <h2>Add New Promotion</h2>
+            <input type="text" id="promo-title" placeholder="Promotion Title" required />
+            <textarea id="promo-desc" placeholder="Details about the promotion..." rows="3" required></textarea>
+            <input type="file" id="promo-image" accept="image/*" />
+            <button onclick="addPromotion()">Add Promotion</button>
+        </section>
+
+        <section>
+            <h2>Current Promotions</h2>
+            <div id="promo-list" class="promo-grid"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firestore.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchPromotions();
+        });
+
+        async function addPromotion() {
+            const title = document.getElementById("promo-title").value.trim();
+            const desc = document.getElementById("promo-desc").value.trim();
+            const imageFile = document.getElementById("promo-image").files[0];
+
+            if (!title || !desc) {
+                alert("Please fill in both title and description.");
+                return;
+            }
+
+            const promoData = {
+                title,
+                description: desc,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.readAsDataURL(imageFile);
+                reader.onloadend = async function () {
+                    promoData.image = reader.result;
+                    await savePromoToDB(promoData);
+                };
+            } else {
+                await savePromoToDB(promoData);
+            }
+        }
+
+        async function savePromoToDB(promo) {
+            try {
+                await db.collection("promotions").add(promo);
+                alert("Promotion added!");
+                fetchPromotions();
+                document.getElementById("promo-title").value = "";
+                document.getElementById("promo-desc").value = "";
+                document.getElementById("promo-image").value = "";
+            } catch (error) {
+                console.error("Failed to add promotion:", error);
+                alert("Something went wrong!");
+            }
+        }
+
+        async function fetchPromotions() {
+            const promoList = document.getElementById("promo-list");
+            promoList.innerHTML = "";
+
+            const querySnapshot = await db.collection("promotions").orderBy("timestamp", "desc").get();
+            querySnapshot.forEach(doc => {
+                const promo = doc.data();
+                const promoDiv = document.createElement("div");
+                promoDiv.classList.add("promo-item");
+                promoDiv.innerHTML = `
+          <h3>${promo.title}</h3>
+          <p>${promo.description}</p>
+          ${promo.image ? `<img src="${promo.image}" alt="Promo Banner" style="max-width:100%; height:auto;">` : ""}
+        `;
+                promoList.appendChild(promoDiv);
+            });
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem("adminLoggedIn");
+            alert("You have been logged out.");
+            window.location.href = "admin.html";
+        }
+    </script>
+</body>
+
+</html>

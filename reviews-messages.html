@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reviews & Messages - Admin</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firestore.js"></script>
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-brand img {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links a,
+        .nav-links button {
+            text-decoration: none;
+            color: white;
+            background: #333;
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-links a.active,
+        .nav-links a:hover,
+        .nav-links button:hover {
+            background-color: #555;
+        }
+
+        header {
+            margin-top: 110px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .message-container {
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .message-card {
+            background: #1e1e1e;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .message-card h4 {
+            margin: 0 0 10px;
+            color: #00d8ff;
+        }
+
+        .message-card p {
+            margin: 5px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+    <nav>
+        <div class="nav-brand">
+            <a href="index.html">
+                <img src="assets/logo.png" alt="Logo" class="nav-logo">
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="manage-menu.html">Manage Menu</a>
+            <a href="edit-about.html">Edit About</a>
+            <a href="manage-orders.html">Orders</a>
+            <a href="promotions.html">Promotions</a>
+            <a href="reviews-messages.html" class="active">Reviews & Messages</a>
+            <button onclick="logoutAdmin()">Logout</button>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Reviews & Messages</h1>
+        <p>Messages submitted via the contact form</p>
+    </header>
+
+    <main class="message-container" id="message-list">
+        <p>Loading messages...</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function logoutAdmin() {
+            localStorage.removeItem("adminLoggedIn");
+            alert("You have been logged out.");
+            window.location.href = "admin.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            if (!localStorage.getItem("adminLoggedIn")) {
+                window.location.href = "admin.html";
+                return;
+            }
+
+            const container = document.getElementById("message-list");
+            container.innerHTML = "<p>Loading messages...</p>";
+
+            try {
+                const querySnapshot = await db.collection("messages").orderBy("timestamp", "desc").get();
+
+                if (querySnapshot.empty) {
+                    container.innerHTML = "<p>No messages yet.</p>";
+                    return;
+                }
+
+                container.innerHTML = "";
+
+                querySnapshot.forEach(doc => {
+                    const msg = doc.data(); // ✅ extract the message data
+                    const card = document.createElement("div");
+                    card.classList.add("message-card");
+
+                    card.innerHTML = `
+                <h4>${msg.name} <span style="font-weight: normal; color: #aaa;">(${msg.email})</span></h4>
+                <p>${msg.message}</p>
+                <small>${msg.timestamp?.toDate().toLocaleString() || ''}</small>
+                <br/>
+                <button onclick="toggleReadStatus('${doc.id}', ${msg.read})">
+                Mark as ${msg.read ? "Unread" : "Read"}
+                </button>
+                <button onclick="deleteMessage('${doc.id}')">Delete</button>
+              `;
+
+                    container.appendChild(card); // ✅ add to the message list
+                });
+
+            } catch (error) {
+                console.error("Error loading messages:", error);
+                container.innerHTML = "<p>Failed to load messages.</p>";
+            }
+        });
+
+        function toggleReadStatus(id, currentStatus) {
+            db.collection("messages").doc(id).update({ read: !currentStatus })
+                .then(() => location.reload())
+                .catch(err => alert("Error updating message status."));
+        }
+
+        function deleteMessage(id) {
+            if (confirm("Are you sure you want to delete this message?")) {
+                db.collection("messages").doc(id).delete()
+                    .then(() => location.reload())
+                    .catch(err => alert("Failed to delete message."));
+            }
+        }
+    </script>
+
+</body>
+
+</html>
