@@ -117,7 +117,8 @@ nav a:hover {
     background: rgba(0, 0, 0, 0.6);
     padding: 20px;
     width: 100%;
-    padding-top: 120px; /* Adjust to match your navbar height */
+    padding-top: 120px;
+    /* Adjust to match your navbar height */
 }
 
 .hero-content {
@@ -875,4 +876,75 @@ body:not(.index-page) main {
     gap: 30px;
     max-width: 1200px;
     margin: auto;
+}
+
+.home-promotions {
+    padding: 40px 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #cffc05;
+    text-align: center;
+    animation: pulse 1s infinite alternate;
+}
+
+.promo-card {
+    perspective: 1000px;
+    cursor: pointer;
+    max-width: 320px;
+    margin: 0 auto;
+    background: transparent;
+}
+
+.promo-inner {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    /* Fixed height for proper flip */
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.promo-card.flipped .promo-inner {
+    transform: rotateY(180deg);
+}
+
+.promo-front,
+.promo-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    background-color: #253f70;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #cffc05;
+    padding: 20px;
+    text-align: center;
+}
+
+.promo-front img {
+    width: 100%;
+    height: 60%;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+.promo-info {
+    padding: 10px;
+}
+
+.promo-info h3 {
+    margin: 10px 0 5px;
+    font-size: 1.1rem;
+}
+
+.promo-info p {
+    font-size: 0.95rem;
+}
+
+.promo-back {
+    transform: rotateY(180deg);
 }

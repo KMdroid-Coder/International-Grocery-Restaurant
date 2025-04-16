@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>International Grocery Restaurant</title>
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 <body class="index-page">
     <nav>
         <div class="nav-brand">
@@ -21,7 +24,7 @@
             <a href="admin.html">Admin</a>
         </div>
     </nav>
-    
+
     <header class="hero">
         <div class="hero-content">
             <h1>International Grocery Restaurant</h1>
@@ -30,31 +33,37 @@
             <button class="cta-button" onclick="location.href='menu.html'">View Our Menu</button>
         </div>
     </header>
-    
+
+    <section class="home-promotions">
+        <h2>Latest Promotions</h2>
+        <div id="promo-carousel" class="promo-carousel">
+            <p>Loading promotions...</p>
+        </div>
+    </section>
+
     <main>
         <section class="menu-preview">
             <h2>Featured Dishes</h2>
             <div id="menu-grid" class="menu-grid"></div>
         </section>
     </main>
-    
+
     <footer>
         <p>&copy; 2025 International Grocery Restaurant. All rights reserved.</p>
     </footer>
-    
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="firestore.js"></script>
-    
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            console.log("Waiting for Firestore to load...");
             const checkFirestore = setInterval(() => {
                 if (typeof db !== "undefined") {
                     clearInterval(checkFirestore);
-                    console.log("Firestore is ready. Fetching featured dishes...");
                     fetchFeaturedMenu();
+                    fetchPromotions();
                 }
             }, 500);
         });
@@ -62,39 +71,78 @@
         function fetchFeaturedMenu() {
             const menuGrid = document.getElementById("menu-grid");
             menuGrid.innerHTML = "<p>Loading featured dishes...</p>";
-            
+
             db.collection("menu").where("featured", "==", true).get()
-            .then((querySnapshot) => {
-                menuGrid.innerHTML = "";
+                .then((querySnapshot) => {
+                    menuGrid.innerHTML = "";
 
-                if (querySnapshot.empty) {
-                    menuGrid.innerHTML = "<p>No featured dishes available.</p>";
-                    return;
-                }
+                    if (querySnapshot.empty) {
+                        menuGrid.innerHTML = "<p>No featured dishes available.</p>";
+                        return;
+                    }
 
-                querySnapshot.forEach((doc) => {
-                    const item = doc.data();
-                    const imageUrl = item.image ? item.image : "default-image.jpg";
-                    const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A";
-                    
-                    menuGrid.innerHTML += `
-                        <div class="menu-item">
-                            <img src="${imageUrl}" alt="${item.name}" class="menu-img">
-                            <h3>${item.name}</h3>
-                            <p class="price">${price}</p>
-                            <button class="order-now" onclick="location.href='order.html'">Order Now</button>
+                    querySnapshot.forEach((doc) => {
+                        const item = doc.data();
+                        const imageUrl = item.image ? item.image : "default-image.jpg";
+                        const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A";
 
-                        </div>
-                    `;
+                        menuGrid.innerHTML += `
+                            <div class="menu-item">
+                                <img src="${imageUrl}" alt="${item.name}" class="menu-img">
+                                <h3>${item.name}</h3>
+                                <p class="price">${price}</p>
+                                <button class="order-now" onclick="location.href='order.html'">Order Now</button>
+                            </div>
+                        `;
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching featured dishes:", error);
+                    menuGrid.innerHTML = "<p>Error loading featured dishes.</p>";
                 });
-            })
-            .catch((error) => {
-                console.error("Error fetching featured dishes:", error);
-                menuGrid.innerHTML = "<p>Error loading featured dishes.</p>";
-            });
         }
 
-        
+        function fetchPromotions() {
+            const promoCarousel = document.getElementById("promo-carousel");
+            promoCarousel.innerHTML = "";
+
+            db.collection("promotions").orderBy("timestamp", "desc").limit(5).get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        promoCarousel.innerHTML = "<p>No promotions currently available.</p>";
+                        return;
+                    }
+
+                    querySnapshot.forEach((doc) => {
+                        const promo = doc.data();
+                        const image = promo.image ? `<img src="${promo.image}" alt="${promo.title}">` : "";
+
+                        promoCarousel.innerHTML += `
+                            <div class="promo-card" onclick="this.classList.toggle('flipped')">
+                                <div class="promo-inner">
+                                    <div class="promo-front">
+                                        ${image}
+                                        <div class="promo-info">
+                                            <h3>${promo.title}</h3>
+                                            <p>${promo.description}</p>
+                                        </div>
+                                    </div>
+                                    <div class="promo-back">
+                                        <p>📞 Call <strong>123456789</strong><br>to get this promotion<br>and confirm your order!</p>
+                                        <a href="tel:123456789" class="cta-button">Call Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching promotions:", error);
+                    promoCarousel.innerHTML = "<p>Error loading promotions.</p>";
+                });
+        }
     </script>
 </body>
+
 </html>
